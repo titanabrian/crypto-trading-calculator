@@ -1,0 +1,77 @@
+<DOCTYPE html>
+  <html>
+    <head>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <link href="./style/main.css">
+    <title>Crypto Trading Calculator</title>
+    <meta charset='utf-8' />
+  </head>
+  <body>
+    <div id="vapp">
+      <div class="min-h-screen bg-red-100 py-6 flex flex-col justify-center sm:py-12">
+        <div class="relative py-3 sm:max-w-7xl sm:mx-auto">
+          <form class="w-full max-w-sm">
+            <div class="flex items-center border-b border-teal-500 py-2">
+              <input v-model="symbol" class="appearance-none bg-yellow-100 border-none w-full mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="SYMBOL" aria-label="SYMBOL">
+              <input v-model="avg" class="appearance-none bg-yellow-100 border-none w-full mr-3 py-1 px-2 leading-tight focus:outline-none"  type="number" placeholder="AVG" aria-label="AVG">
+              <input v-model="total" class="appearance-none bg-yellow-100 border-none w-full mr-3 py-1 px-2 leading-tight focus:outline-none" type="number" placeholder="TOTAL" aria-label="TOTAL">
+              <button class="flex-shrink-0 bg-green-200 border-2 text-sm py-1 px-2 rounded" type="button" v-on:click="addItem">
+                Add
+              </button>
+            </div>
+          </form>
+          <div class="flex flex-col">
+            <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+              <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+                <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                  <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                      <tr>
+                        <th v-for="columnTitle in config.tableColumns" scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          {{columnTitle}}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                      <tr v-for="(row, index) in tableRows">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                            {{row.symbol}}
+                          </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {{formatNumber(row.lot)}}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {{formatNumber(row.avg)}}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {{formatNumber(row.currentPrice)}}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {{formatNumber(row.buyValue)}}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {{formatNumber(row.currentValue)}}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <div class="text-sm" v-bind:class="{'text-green-500':row.isGain, 'text-red-500': !row.isGain}">{{formatNumber(row.pot)}}</div>
+                          <div class="text-sm" v-bind:class="{'text-green-500':row.isGain, 'text-red-500': !row.isGain}">{{formatNumber(row.potPercent)}}%</div>
+                        </td>
+                        <td class="text-sm bg-red-200 text-gray-500 py-2 px-3 hover:bg-red-500 hover:text-gray-200" style="cursor: pointer" @click="removeItem(index)">Remove</td>
+                      </tr>
+                      <!-- More people... -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./scripts/index.js"></script>
+  </body>
+  </html>
